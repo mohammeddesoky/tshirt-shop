@@ -44,7 +44,8 @@ export default function Home() {
           <div className="order-1 md:order-2 relative">
             <div className="aspect-[4/5] bg-sand-100 overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&q=80"
+                // src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&q=80"
+                src="/images/main.png"
                 alt="تيشرت أساسي"
                 className="w-full h-full object-cover"
               />
