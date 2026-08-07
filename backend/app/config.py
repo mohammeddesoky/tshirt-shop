@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
 
     # CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
-    CORS_ORIGINS: str = "https://aftereight-shop.mi312572.workers.dev,http://localhost:5173,http://localhost:3000"
+    CORS_ORIGINS: str = "https://aftereight-shop.pages.dev,http://localhost:5173,http://localhost:3000"
 
     ADMIN_EMAIL: str = "admin@tshirtshop.com"
     ADMIN_PASSWORD: str = "Admin@12345"
