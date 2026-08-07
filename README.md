@@ -1,71 +1,72 @@
-# AfterEight — متجر تيشرتات إلكتروني
+# AfterEight — T-Shirt E-Commerce Store
 
-منصة تجارة إلكترونية كاملة لبيع التيشرتات، مبنية بـ **React + FastAPI**، جاهزة للاستخدام الفعلي وقابلة للتطوير.
+A complete e-commerce platform for selling T-shirts, built with **React + FastAPI**, ready for real-world use and designed to be scalable.
 
 ---
 
-## المحتويات
+## Table of Contents
 
-- [Tech Stack](#tech-stack)
-- [هيكل المشروع](#هيكل-المشروع)
-- [التشغيل محليًا](#التشغيل-محليًا)
-- [التشغيل عبر Docker](#التشغيل-عبر-docker)
-- [بيانات الدخول الافتراضية للإدارة](#بيانات-الدخول-الافتراضية-للإدارة)
-- [الانتقال من SQLite إلى PostgreSQL](#الانتقال-من-sqlite-إلى-postgresql)
-- [نشر المشروع](#نشر-المشروع)
-- [ربط دومين مجاني](#ربط-دومين-مجاني)
-- [الميزات المنفذة والمتبقية](#الميزات-المنفذة-والمتبقية)
+* [Tech Stack](#tech-stack)
+* [Project Structure](#project-structure)
+* [Local Development](#local-development)
+* [Running with Docker](#running-with-docker)
+* [Default Admin Credentials](#default-admin-credentials)
+* [Migrating from SQLite to PostgreSQL](#migrating-from-sqlite-to-postgresql)
+* [Deployment](#deployment)
+* [Connecting a Free Domain](#connecting-a-free-domain)
+* [Implemented and Remaining Features](#implemented-and-remaining-features)
+* [Security Notes Before Production](#security-notes-before-production)
 
 ---
 
 ## Tech Stack
 
-| الطبقة | التقنية |
-|---|---|
-| Frontend | React 18 + Vite + TypeScript |
-| Styling | Tailwind CSS |
-| Icons | Lucide React |
-| Routing | React Router v6 |
-| Backend | FastAPI (Python) |
-| ORM | SQLAlchemy 2.0 |
-| Database | SQLite (dev) / PostgreSQL (production-ready) |
-| Auth | JWT + bcrypt |
+| Layer          | Technology                                           |
+| -------------- | ---------------------------------------------------- |
+| Frontend       | React 18 + Vite + TypeScript                         |
+| Styling        | Tailwind CSS                                         |
+| Icons          | Lucide React                                         |
+| Routing        | React Router v6                                      |
+| Backend        | FastAPI (Python)                                     |
+| ORM            | SQLAlchemy 2.0                                       |
+| Database       | SQLite (development) / PostgreSQL (production-ready) |
+| Authentication | JWT + bcrypt                                         |
 
 ---
 
-## هيكل المشروع
+## Project Structure
 
-```
+```text
 tshirt-shop/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py            # نقطة الدخول لـ FastAPI
-│   │   ├── config.py          # الإعدادات (من .env)
-│   │   ├── database.py        # اتصال SQLAlchemy
-│   │   ├── models.py          # جداول قاعدة البيانات
-│   │   ├── schemas.py         # Pydantic schemas (تحقق من البيانات)
-│   │   ├── auth.py            # JWT + bcrypt
-│   │   ├── seed.py            # بيانات تجريبية
+│   │   ├── main.py            # FastAPI entry point
+│   │   ├── config.py          # Configuration loaded from .env
+│   │   ├── database.py        # SQLAlchemy database connection
+│   │   ├── models.py          # Database models
+│   │   ├── schemas.py         # Pydantic schemas and validation
+│   │   ├── auth.py            # JWT + bcrypt authentication
+│   │   ├── seed.py            # Seed data
 │   │   └── routers/
 │   │       ├── products.py
 │   │       ├── orders.py
 │   │       ├── auth.py
 │   │       ├── customers.py
-│   │       ├── meta.py        # فئات / ألوان / مقاسات
-│   │       ├── upload.py      # رفع الصور
-│   │       └── dashboard.py   # إحصائيات لوحة التحكم
+│   │       ├── meta.py        # Categories / colors / sizes
+│   │       ├── upload.py      # Image uploads
+│   │       └── dashboard.py   # Dashboard statistics
 │   ├── requirements.txt
 │   ├── .env.example
 │   └── Dockerfile
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── pages/              # الصفحات العامة (Home, Shop, Cart...)
-│   │   ├── pages/admin/        # لوحة التحكم
-│   │   ├── components/         # مكونات قابلة لإعادة الاستخدام
-│   │   ├── context/            # Cart / Auth / Toast contexts
-│   │   ├── api/client.ts       # طبقة الاتصال بالـ API
-│   │   └── types/               # TypeScript types
+│   │   ├── pages/             # Public pages (Home, Shop, Cart, etc.)
+│   │   ├── pages/admin/       # Admin dashboard
+│   │   ├── components/        # Reusable components
+│   │   ├── context/           # Cart / Auth / Toast contexts
+│   │   ├── api/client.ts      # API communication layer
+│   │   └── types/             # TypeScript types
 │   ├── .env.example
 │   └── Dockerfile
 │
@@ -74,59 +75,90 @@ tshirt-shop/
 
 ---
 
-## التشغيل محليًا
+## Local Development
 
-### المتطلبات
-- Node.js 18+
-- Python 3.11+
+### Requirements
 
-### 1. الباك إند (FastAPI)
+* Node.js 18+
+* Python 3.11+
+
+### 1. Backend (FastAPI)
 
 ```bash
 cd backend
+
 python -m venv venv
-source venv/bin/activate        # على Windows: venv\Scripts\activate
+
+# Windows:
+venv\Scripts\activate
+
+# macOS / Linux:
+source venv/bin/activate
 
 pip install -r requirements.txt
 
-cp .env.example .env            # عدّل القيم إذا لزم الأمر
+# Windows alternative:
+# py -m pip install -r requirements.txt
 
-python -m app.seed              # ينشئ الجداول + مستخدم أدمن + بيانات تجريبية
+cp .env.example .env
+# On Windows PowerShell, you can copy it with:
+# Copy-Item .env.example .env
+
+# Edit the environment variables if needed.
+
+python -m app.seed
 
 uvicorn app.main:app --reload --port 8000
 ```
 
-الباك إند يعمل الآن على: `http://localhost:8000`
-توثيق الـ API التفاعلي (Swagger): `http://localhost:8000/docs`
+The backend will be available at:
 
-### 2. الفرونت إند (React)
+```text
+http://localhost:8000
+```
 
-في نافذة طرفية جديدة:
+Interactive API documentation (Swagger):
+
+```text
+http://localhost:8000/docs
+```
+
+### 2. Frontend (React)
+
+Open a **new terminal window**:
 
 ```bash
 cd frontend
-cp .env.example .env    # اتركه فارغًا للتطوير المحلي (يستخدم الـ proxy التلقائي)
 
 npm install
+
 npm run dev
 ```
 
-الموقع يعمل الآن على: `http://localhost:5173`
+The frontend will be available at:
+
+```text
+http://localhost:5173
+```
 
 ---
 
-## التشغيل عبر Docker
+## Running with Docker
 
-الطريقة الأسرع لتشغيل المشروع بالكامل (باك إند + فرونت إند) بأمر واحد:
+The fastest way to run the entire project (frontend + backend) with one command:
 
 ```bash
 docker compose up --build
 ```
 
-- الموقع: `http://localhost`
-- الـ API: `http://localhost:8000`
+After the containers start:
 
-يمكنك تخصيص القيم عبر متغيرات البيئة قبل التشغيل، مثال:
+* Website: `http://localhost`
+* API: `http://localhost:8000`
+
+You can customize environment variables before starting Docker.
+
+For example:
 
 ```bash
 SECRET_KEY=your-long-random-secret ADMIN_PASSWORD=YourStrongPassword docker compose up --build
@@ -134,121 +166,451 @@ SECRET_KEY=your-long-random-secret ADMIN_PASSWORD=YourStrongPassword docker comp
 
 ---
 
-## بيانات الدخول الافتراضية للإدارة
+## Default Admin Credentials
 
-بعد تشغيل `python -m app.seed` (أو عند أول تشغيل عبر Docker):
+After running:
 
-- **الرابط**: `/admin/login`
-- **البريد الإلكتروني**: `admin@tshirtshop.com`
-- **كلمة المرور**: `Admin@12345`
+```bash
+python -m app.seed
+```
 
-⚠️ **مهم**: غيّر هذه القيم فورًا في بيئة الإنتاج عبر متغيرات `ADMIN_EMAIL` و`ADMIN_PASSWORD` في ملف `.env` قبل تشغيل seed لأول مرة، وغيّر `SECRET_KEY` إلى قيمة عشوائية طويلة.
+or after the initial Docker startup, the default admin account is:
+
+**Admin URL:**
+
+```text
+/admin/login
+```
+
+**Email:**
+
+```text
+admin@tshirtshop.com
+```
+
+**Password:**
+
+```text
+Admin@12345
+```
+
+⚠️ **Important:** Change these credentials immediately in production.
+
+Set the following environment variables in `.env` before running the seed process for the first time:
+
+```env
+ADMIN_EMAIL=your-admin-email@example.com
+ADMIN_PASSWORD=your-strong-password
+```
+
+Also change:
+
+```env
+SECRET_KEY=your-long-random-secret
+```
+
+to a long, randomly generated secret.
 
 ---
 
-## الانتقال من SQLite إلى PostgreSQL
+## Migrating from SQLite to PostgreSQL
 
-بفضل استخدام SQLAlchemy كطبقة تجريد، الانتقال لا يتطلب أي تعديل في الكود — فقط تغيير سطر واحد:
+Because the project uses SQLAlchemy as the database abstraction layer, migrating to PostgreSQL requires minimal code changes.
 
-1. ثبّت PostgreSQL أو استخدم خدمة مُدارة (Railway, Render, Supabase, Neon...).
-2. أنشئ قاعدة بيانات فارغة.
-3. عدّل `DATABASE_URL` في ملف `.env`:
+### 1. Create a PostgreSQL database
 
-```
-# بدلاً من:
+You can either install PostgreSQL locally or use a managed service such as:
+
+* Railway
+* Render
+* Supabase
+* Neon
+
+### 2. Update `DATABASE_URL`
+
+Replace:
+
+```env
 DATABASE_URL=sqlite:///./tshirt_shop.db
+```
 
-# استخدم:
+with:
+
+```env
 DATABASE_URL=postgresql://username:password@host:5432/database_name
 ```
 
-4. تأكد أن `psycopg2-binary` مثبت (أضفه لـ `requirements.txt` إذا لم يكن موجودًا: `pip install psycopg2-binary`).
-5. شغّل `python -m app.seed` مرة أخرى لإنشاء الجداول والبيانات الأساسية على القاعدة الجديدة.
+### 3. Install the PostgreSQL driver
+
+Make sure `psycopg2-binary` is included in `requirements.txt`.
+
+If it is not:
+
+```bash
+pip install psycopg2-binary
+```
+
+Then add it to `requirements.txt`.
+
+### 4. Run the seed process
+
+```bash
+python -m app.seed
+```
+
+This will create the required database tables and seed the initial data.
 
 ---
 
-## نشر المشروع
+# Deployment
 
-### الفرونت إند
+## Frontend
 
-**Vercel / Netlify** (الأسهل والموصى به لمشروع Vite):
-1. ادفع الكود إلى GitHub.
-2. اربط المستودع بـ Vercel أو Netlify.
-3. إعدادات البناء: `Build command: npm run build`, `Output directory: dist`.
-4. أضف متغير البيئة `VITE_API_BASE_URL` بعنوان الباك إند المنشور (مثال: `https://your-api.onrender.com`).
+The easiest options for deploying the Vite frontend are:
 
-**GitHub Pages**:
+* Vercel
+* Netlify
+
+### Vercel / Netlify
+
+1. Push the project to GitHub.
+2. Connect the repository to Vercel or Netlify.
+3. Configure the build settings:
+
+```text
+Build Command:
+npm run build
+
+Output Directory:
+dist
+```
+
+4. Add the following environment variable:
+
+```env
+VITE_API_BASE_URL=https://your-api.onrender.com
+```
+
+Replace the value with your deployed backend URL.
+
+---
+
+## GitHub Pages
+
+You can also build the frontend using:
+
 ```bash
 npm run build
-# ثم انشر محتوى مجلد dist عبر gh-pages أو GitHub Actions
 ```
-> ملاحظة: GitHub Pages لا يدعم إعادة التوجيه من جهة السيرفر تلقائيًا لتطبيقات SPA؛ ستحتاج لإضافة ملف `404.html` يعيد التوجيه لـ `index.html`، أو استخدام حزمة مثل `gh-pages` مع إعداد `basename` مناسب في React Router.
 
-### الباك إند
+Then deploy the contents of the `dist` directory using GitHub Pages or GitHub Actions.
 
-**Render**:
-1. أنشئ "New Web Service" واربطه بمستودع GitHub الخاص بمجلد `backend`.
-2. Build Command: `pip install -r requirements.txt`
-3. Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-4. أضف متغيرات البيئة من `.env.example` (خصوصًا `DATABASE_URL` لقاعدة PostgreSQL مُدارة من Render).
+> **Note:** GitHub Pages does not automatically support server-side redirects for single-page applications. You may need to add a `404.html` redirect to `index.html` or configure React Router with an appropriate `basename`.
 
-**Railway**:
-1. أنشئ مشروعًا جديدًا واربطه بالمستودع.
-2. Railway يكتشف تلقائيًا أنه مشروع Python؛ تأكد أن أمر التشغيل هو نفسه أعلاه.
-3. أضف قاعدة بيانات PostgreSQL من لوحة Railway مباشرة، وانسخ رابط الاتصال إلى `DATABASE_URL`.
+---
 
-**Fly.io**:
+# Backend Deployment
+
+## Render
+
+1. Create a new **Web Service**.
+2. Connect it to your GitHub repository.
+3. Point it to the `backend` directory if your deployment setup requires it.
+4. Use:
+
+**Build Command:**
+
+```bash
+pip install -r requirements.txt
+```
+
+**Start Command:**
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+5. Add the required environment variables, especially:
+
+```env
+DATABASE_URL=your-postgresql-database-url
+SECRET_KEY=your-secret-key
+```
+
+---
+
+## Railway
+
+1. Create a new Railway project.
+2. Connect your GitHub repository.
+3. Railway should detect the Python backend automatically.
+4. Make sure the start command is:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+5. Add a PostgreSQL database through Railway if needed.
+6. Set the PostgreSQL connection string as:
+
+```env
+DATABASE_URL=your-postgresql-database-url
+```
+
+---
+
+## Fly.io
+
+From the backend directory:
+
 ```bash
 cd backend
-fly launch          # يولّد fly.toml تلقائيًا، اختر عدم إنشاء قاعدة بيانات إذا كنت ستستخدم خدمة خارجية
+
+fly launch
+```
+
+Follow the prompts.
+
+If you are using an external PostgreSQL database, choose not to create a Fly-managed database.
+
+Then deploy:
+
+```bash
 fly deploy
 ```
-تأكد من ضبط الأسرار عبر: `fly secrets set SECRET_KEY=... DATABASE_URL=...`
 
-بعد نشر الباك إند، **حدّث CORS_ORIGINS** في متغيرات البيئة ليشمل دومين الفرونت إند المنشور.
+Set secrets using:
 
----
+```bash
+fly secrets set SECRET_KEY=your-secret-key DATABASE_URL=your-database-url
+```
 
-## ربط دومين مجاني
-
-إذا كنت تستضيف الباك إند على سيرفر بعنوان IP ثابت (مثل VPS):
-
-**DuckDNS**:
-1. سجّل في [duckdns.org](https://www.duckdns.org) وأنشئ subdomain مجاني (مثال: `yourshop.duckdns.org`).
-2. أضف عنوان IP الخاص بسيرفرك.
-3. ثبّت سكربت التحديث التلقائي لـ IP (متوفر في لوحة DuckDNS) إذا كان IP ديناميكيًا.
-
-**No-IP**:
-1. سجّل في [noip.com](https://www.noip.com) وأنشئ hostname مجاني.
-2. اربطه بعنوان IP الخاص بسيرفرك بنفس الطريقة.
-
-> **ملاحظة**: منصات مثل Vercel وNetlify وRender توفر أيضًا دومينات فرعية مجانية جاهزة (`your-app.vercel.app`، إلخ) دون الحاجة لأي إعداد إضافي — وهي الخيار الأبسط لمعظم الحالات.
+After deploying the backend, make sure `CORS_ORIGINS` includes the production frontend domain.
 
 ---
 
-## الميزات المنفذة والمتبقية
+# Connecting a Free Domain
 
-هذا المشروع كبير جدًا، وقد رُكّز البناء أولًا على أساس متين وكامل الوظائف الأساسية بجودة إنتاجية حقيقية (وليس Demo). القائمة التالية توضح الحالة بوضوح:
+If the backend is hosted on a server with a public/static IP address, you can use a free dynamic DNS service.
 
-### ✅ منفذ بالكامل
-كل ما ورد في الطلب الأساسي: الصفحة الرئيسية، صفحة تفاصيل المنتج مع Gallery وAlوان والمقاسات، الكمية، السلة، Checkout، تتبع الطلب، لوحة تحكم Admin كاملة (منتجات/طلبات/عملاء/إحصائيات مع رسوم بيانية)، البحث، الفلاتر، REST API كاملة، JWT Auth، bcrypt، قاعدة بيانات بكل الجداول والعلاقات المطلوبة، التحقق من المخزون، Responsive design، Dark Mode، Skeleton Loading، Toast Notifications، صفحة 404، صفحة سلة فارغة، SEO meta tags/OG/sitemap/robots.txt، code splitting، Docker كامل، وكل الصفحات الثابتة (من نحن، تواصل معنا، الأسئلة الشائعة، سياسات الاستبدال/الخصوصية/الشروط).
+## DuckDNS
 
-### 🚧 غير منفذ بعد (Bonus Features)
-هذه الميزات لم تُبنَ في هذه الجولة لضخامة النطاق، لكن البنية الحالية (خصوصًا نماذج قاعدة البيانات وبنية الـ API) مصممة لتسهيل إضافتها لاحقًا دون إعادة هيكلة:
+1. Create an account at DuckDNS.
+2. Create a free subdomain, for example:
 
-- **Wishlist (المفضلة)** — يحتاج جدول جديد + صفحة + ربط بحساب المستخدم
-- **حسابات المستخدمين** (تسجيل/دخول/نسيان كلمة المرور للعملاء أنفسهم، بخلاف الأدمن) — النظام الحالي يحفظ العميل تلقائيًا برقم الهاتف عند الطلب، لكن لا يوجد تسجيل دخول للعميل
-- **تقييمات ومراجعات مكتوبة من العملاء** — حاليًا التقييم (rating) حقل ثابت على المنتج فقط
-- **كوبونات الخصم**
-- **إشعارات فورية داخل لوحة التحكم عند وصول طلب جديد** (Real-time/WebSocket)
+```text
+yourshop.duckdns.org
+```
 
-إذا أردت أيًا من هذه الميزات، أخبرني وسأبنيها في جولة تالية بنفس مستوى الجودة.
+3. Point the hostname to your server's IP address.
+4. If the IP is dynamic, configure DuckDNS's automatic IP update script.
+
+## No-IP
+
+You can also use No-IP to create a free hostname and associate it with your server's IP address.
+
+> **Note:** For most users, Vercel, Netlify, and Render are easier because they already provide free subdomains such as:
+
+```text
+yourshop.vercel.app
+yourshop.netlify.app
+yourshop.onrender.com
+```
+
+No separate domain configuration is required.
 
 ---
 
-## ملاحظات أمان مهمة قبل الإنتاج
+# Implemented and Remaining Features
 
-1. غيّر `SECRET_KEY` و`ADMIN_PASSWORD` الافتراضيين.
-2. فعّل HTTPS (عبر Render/Vercel/Netlify هذا تلقائي، أو استخدم Let's Encrypt على VPS).
-3. قيّد `CORS_ORIGINS` على دومين الإنتاج فقط (لا تتركه مفتوحًا `*`).
-4. فعّل نسخ احتياطي دوري لقاعدة البيانات إذا انتقلت لـ PostgreSQL.
+The project was designed around a solid production-style foundation rather than a simple demo.
+
+## ✅ Fully Implemented
+
+The following core features are implemented:
+
+* Home page
+* Product listing / Shop page
+* Product details
+* Product image gallery
+* Product colors
+* Product sizes
+* Quantity selection
+* Shopping cart
+* Checkout
+* Order tracking
+* Admin dashboard
+* Product management
+* Order management
+* Customer management
+* Dashboard statistics
+* Dashboard charts
+* Search
+* Product filters
+* REST API
+* JWT authentication
+* bcrypt password hashing
+* Database models and relationships
+* Stock validation
+* Responsive design
+* Dark mode
+* Skeleton loading
+* Toast notifications
+* Empty cart state
+* 404 page
+* SEO meta tags
+* Open Graph metadata
+* Sitemap
+* Robots.txt
+* Code splitting
+* Docker support
+* About page
+* Contact page
+* FAQ
+* Return policy
+* Privacy policy
+* Terms and conditions
+
+---
+
+## 🚧 Bonus Features Not Yet Implemented
+
+The following features were intentionally left for a future development phase due to the large scope of the project.
+
+The current architecture is designed to support them without requiring a major rewrite.
+
+### Wishlist
+
+Requires:
+
+* Wishlist database table
+* Wishlist API
+* Wishlist page
+* User account integration
+
+### Customer Accounts
+
+Currently, customers are automatically stored using their phone number when placing an order.
+
+Customer authentication is not yet implemented.
+
+Future support can include:
+
+* Customer registration
+* Customer login
+* Forgot password
+* Password reset
+* Customer profile
+* Order history
+
+### Customer Reviews
+
+Currently, products have a fixed rating field.
+
+Future support can include:
+
+* Written customer reviews
+* Star ratings
+* Review moderation
+* Verified purchase reviews
+
+### Discount Coupons
+
+Future support can include:
+
+* Percentage discounts
+* Fixed discounts
+* Expiration dates
+* Minimum order amounts
+* Coupon validation
+
+### Real-Time Admin Notifications
+
+Future support can include:
+
+* New order notifications
+* WebSocket integration
+* Real-time dashboard updates
+* Browser notifications
+
+---
+
+# Security Notes Before Production
+
+Before deploying the application publicly, make sure to:
+
+### 1. Change the default secrets
+
+Change:
+
+```env
+SECRET_KEY=...
+ADMIN_PASSWORD=...
+```
+
+Never use the default development credentials in production.
+
+### 2. Enable HTTPS
+
+Use HTTPS in production.
+
+Platforms such as Vercel, Netlify, and Render provide HTTPS automatically.
+
+If you deploy to your own VPS, use Let's Encrypt or another trusted certificate provider.
+
+### 3. Restrict CORS
+
+Do not leave CORS open with:
+
+```text
+*
+```
+
+Instead, specify your actual production frontend domain.
+
+For example:
+
+```env
+CORS_ORIGINS=https://yourshop.vercel.app
+```
+
+### 4. Use PostgreSQL in production
+
+SQLite is suitable for local development and testing.
+
+For a real e-commerce application, PostgreSQL is recommended.
+
+### 5. Back Up the Database
+
+If you migrate to PostgreSQL, configure regular database backups.
+
+---
+
+# Recommended Production Architecture
+
+For a simple and affordable deployment, the recommended architecture is:
+
+```text
+                    Customer
+                       │
+                       ▼
+             ┌─────────────────┐
+             │     Vercel      │
+             │ React Frontend  │
+             └────────┬────────┘
+                      │
+                      │ HTTPS / REST API
+                      ▼
+             ┌─────────────────┐
+             │     Render      │
+             │ FastAPI Backend │
+             └────────┬────────┘
+                      │
+                      ▼
+             ┌─────────────────┐
+             │   PostgreSQL    │
+             │    Database     │
+             └─────────────────┘
+```
+
+This setup keeps the initial deployment simple, inexpensive, and easy to maintain while leaving room for the application to scale later.
