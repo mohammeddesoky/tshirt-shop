@@ -35,9 +35,13 @@ export default function Navbar() {
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
 
-        <Link to="/" className="font-display font-bold text-xl tracking-tight shrink-0">
-          After<span className="text-pine-600">Eight</span>
-        </Link>
+      <Link to="/" className="shrink-0">
+        <img
+          src="/images/logo.png"
+          alt="AfterEight"
+          className="h-20 w-auto object-contain"
+        />
+      </Link>
         {/* <Link to="/" className="font-display font-bold text-xl tracking-tight shrink-0">
           FIELD<span className="text-pine-600">GOODS</span>
         </Link> */}
