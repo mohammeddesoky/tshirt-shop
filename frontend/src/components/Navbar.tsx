@@ -36,8 +36,11 @@ export default function Navbar() {
         </button>
 
         <Link to="/" className="font-display font-bold text-xl tracking-tight shrink-0">
-          FIELD<span className="text-pine-600">GOODS</span>
+          After<span className="text-pine-600">Eight</span>
         </Link>
+        {/* <Link to="/" className="font-display font-bold text-xl tracking-tight shrink-0">
+          FIELD<span className="text-pine-600">GOODS</span>
+        </Link> */}
 
         <nav className="hidden md:flex items-center gap-7">
           {links.map((l) => (
