@@ -223,6 +223,20 @@ class OrderTrackRequest(BaseModel):
     phone: str
 
 
+class ContactMessageIn(BaseModel):
+    name: str
+    email: str
+    message: str
+
+
+class ContactMessageOut(ContactMessageIn):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 # ---------- Customers (admin) ----------
 
 class CustomerAdminOut(BaseModel):

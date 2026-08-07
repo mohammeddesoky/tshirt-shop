@@ -1,15 +1,27 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { api } from '@/api/client';
 import { useToast } from '@/context/ToastContext';
 
 export default function Contact() {
   const { showToast } = useToast();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('تم إرسال رسالتك، سنتواصل معك قريبًا!');
-    setForm({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+
+    try {
+      await api.post('/api/messages', form);
+      showToast('تم إرسال رسالتك، سنتواصل معك قريبًا!');
+      setForm({ name: '', email: '', message: '' });
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'حدث خطأ أثناء إرسال الرسالة', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -37,8 +49,11 @@ export default function Contact() {
             required rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
             placeholder="رسالتك" className="w-full border border-ink/20 px-3 py-2.5 text-sm bg-transparent"
           />
-          <button className="bg-ink text-paper dark:bg-paper-dark dark:text-ink-dark px-6 py-3 text-sm font-medium hover:bg-pine-600">
-            إرسال الرسالة
+          <button
+            disabled={isSubmitting}
+            className="bg-ink text-paper dark:bg-paper-dark dark:text-ink-dark px-6 py-3 text-sm font-medium hover:bg-pine-600 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting ? 'جاري الإرسال...' : 'إرسال الرسالة'}
           </button>
         </form>
       </div>

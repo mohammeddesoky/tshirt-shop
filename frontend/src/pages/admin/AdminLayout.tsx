@@ -1,5 +1,5 @@
 import { NavLink, Outlet, Navigate, Link } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, MessageCircle, LogOut } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import Spinner from '@/components/Spinner';
 
@@ -8,6 +8,7 @@ const navItems = [
   { to: '/admin/products', label: 'المنتجات', icon: Package },
   { to: '/admin/orders', label: 'الطلبات', icon: ShoppingCart },
   { to: '/admin/customers', label: 'العملاء', icon: Users },
+  { to: '/admin/messages', label: 'الرسائل', icon: MessageCircle },
 ];
 
 export default function AdminLayout() {

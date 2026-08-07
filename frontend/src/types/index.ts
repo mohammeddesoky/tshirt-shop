@@ -126,6 +126,14 @@ export interface CustomerAdmin {
   total_spent: number;
 }
 
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+}
+
 export interface DashboardStats {
   total_orders: number;
   total_sales: number;

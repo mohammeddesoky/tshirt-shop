@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import Base, engine
-from app.routers import products, orders, auth, customers, meta, upload, dashboard
+from app.routers import products, orders, auth, customers, meta, upload, dashboard, messages
 
 # Create tables if they don't exist yet (use Alembic migrations for production schema changes)
 Base.metadata.create_all(bind=engine)
@@ -38,6 +38,7 @@ app.include_router(orders.router)
 app.include_router(customers.router)
 app.include_router(meta.router)
 app.include_router(upload.router)
+app.include_router(messages.router)
 app.include_router(dashboard.router)
 
 
