@@ -3,6 +3,7 @@ FastAPI application entrypoint.
 Mounts routers, CORS, and serves uploaded images statically.
 """
 import os
+import app.seed
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
